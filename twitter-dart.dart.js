@@ -3022,34 +3022,46 @@ function _jsKeys(obj) {
   }
   return null;
 }
-//  ********** Library twitter-dart **************
-// ********** Code for top level **************
-function createTweetElem(tweet) {
-  var id = tweet.$index("id");
-  var user = tweet.$index("from_user");
+//  ********** Library Tweet **************
+// ********** Code for Tweet **************
+function Tweet(_tweet) {
+  this._tweet = _tweet;
+}
+Tweet.prototype.createTweetElem = function() {
+  var id = this.getTweetId();
+  var user = this.getUser();
   var outerDiv = get$$document().body.querySelector("#tweets");
-  var tweetText = tweet.$index("text");
+  var tweetText = this._tweet.$index("text");
   var foo = "";
   var div = _ElementFactoryProvider.Element$tag$factory("div");
   outerDiv.get$elements().add(div);
   div.set$attributes(_map(["class", "tweet", "id", ("" + id), "style", "background-color:#BADA55;padding:10px;margin:5px"]));
   var pro_pic = _ElementFactoryProvider.Element$tag$factory("img");
   div.get$elements().add(pro_pic);
-  var src = tweet.$index("profile_image_url");
-  pro_pic.set$attributes(_map(["src", src]));
+  var img_src = this.getProfilePic().$index((1));
+  pro_pic.set$attributes(_map(["src", img_src]));
   var text = _ElementFactoryProvider.Element$tag$factory("p");
   div.get$elements().add(text);
-  text.set$innerHTML(("<b><a href=https://twitter.com/#!/" + user + ">" + user + "</a></b>: " + tweetText));
+  text.set$innerHTML(("<b><a href=" + user.$index((1)) + ">" + user.$index((0)) + "</a></b>: " + tweetText));
 }
+Tweet.prototype.getUser = function() {
+  var userinfo = [this._tweet.$index("from_user"), ("https://twitter.com/#!/" + this._tweet.$index("from_user"))];
+  return userinfo;
+}
+Tweet.prototype.getTweetId = function() {
+  return this._tweet.$index("id");
+}
+Tweet.prototype.getProfilePic = function(user) {
+  if ($eq$(user)) user = this._tweet.$index("from_user");
+  var pic = [this._tweet.$index("profile_image_url"), ("https://api.twitter.com/1/users/profile_image?screen_name=" + user + "&size=original")];
+  return pic;
+}
+// ********** Code for top level **************
+//  ********** Library twitter-dart **************
+// ********** Code for top level **************
 function dataReceived(e) {
   var data = json_JSON.parse(e);
   var len = data.$index("results").get$length();
-  try {
-    plot(data.$index("results").$index((4)).$index("geo").$index("coordinates").$index((0)), data.$index("results").$index((4)).$index("geo").$index("coordinates").$index((1)), "hello world", "map");
-  } catch (z) {
-    z = _toDartException(z);
-    print$(z);
-  }
   try {
     for (var i = (0);
      $lt$(i, data.$index("results").$index((0)).$index("entities").$index("urls").get$length()); i = $add$(i, (1))) {
@@ -3069,18 +3081,13 @@ function dataReceived(e) {
   get$$document().body.get$elements().add(outerDiv);
   outerDiv.set$attributes(_map(["id", "tweets"]));
   for (var i = (0);
-   i < len; ++i) createTweetElem(data.$index("results").$index(i));
+   i < len; ++i) new Tweet(data.$index("results").$index(i)).createTweetElem();
 }
 function getResponse(query) {
   var script = _ElementFactoryProvider.Element$tag$factory("script");
   script.set$attributes(_map(["src", ("http://search.twitter.com/search.json?q=" + query + "&callback=callbackForJsonpApi&include_entities=true")]));
   get$$document().body.get$elements().add(script);
   script.remove();
-}
-function plot(x, y, title, div) {
-  var script = _ElementFactoryProvider.Element$tag$factory("script");
-  script.set$innerHTML(("var map = new google.maps.Map(document.getElementById(\"" + div + "\"),{zoom: 12,center: new google.maps.LatLng(" + x + ", " + y + "),mapTypeId: google.maps.MapTypeId.ROADMAP});google.maps.event.addListener(map, 'bounds_changed', function() {});var marker = new google.maps.Marker({position: new google.maps.LatLng(" + x + ", " + y + "),map: map,title:\"" + title + "\"});"));
-  get$$document().body.querySelector("#target").get$elements().add(script);
 }
 function main() {
   var x = getResponse;

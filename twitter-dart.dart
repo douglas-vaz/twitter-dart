@@ -1,49 +1,12 @@
 #import('dart:html');
 #import('dart:json');
+#import('./Tweet.dart');
 
-createTweetElem(tweet)
-{
-  var id = tweet['id'];
-  var user = tweet['from_user'];  //User name
-  
-  //Look for wrapper div
-  Element outerDiv = document.body.query('#tweets');
-  
-  
-  String tweetText = tweet['text'];
-  String foo = '';
-  //Parent div wrapper for a tweet
-  Element div = new Element.tag('div');
-  //Add wrapper div to body
-  
-  outerDiv.elements.add(div);
-  
-  
-  div.attributes = {"class":"tweet","id":"${id}","style":"background-color:#BADA55;padding:10px;margin:5px"};
-  
-  //Profile pic
-  Element pro_pic =new Element.tag('img');
-  div.elements.add(pro_pic);
-  var src = tweet['profile_image_url'];
-  pro_pic.attributes = {'src':src};
-  
-  //Tweet text
-  Element text = new Element.tag('p');
-
-  //Add to wrapper div
-  div.elements.add(text);
-  text.innerHTML = '<b><a href=https://twitter.com/#!/$user>$user</a></b>: $tweetText';
-}
 
 dataReceived(e) {
   var data = JSON.parse(e);
   int len = data['results'].length;
   
-  //Experimental plot map
-  try{
-    plot(data['results'][4]['geo']['coordinates'][0],data['results'][4]['geo']['coordinates'][1],"hello world","map");
-  }catch(var z){print(z);}
-    
   //document.query("#dump").innerHTML = data['results'][4]['geo']['coordinates'][0];
   
   try{
@@ -73,8 +36,7 @@ dataReceived(e) {
   
   //Add all tweets from response to the DOM
   for (int i = 0; i < len; ++i)
-    createTweetElem(data['results'][i]);
-  
+    new Tweet(data['results'][i]).createTweetElem(); 
   
 }
 
@@ -94,15 +56,6 @@ getResponse(String query)
   script.remove();
 
 }
-
-//Experimental plot geo on map
-plot(x,y,title,div)
-{
-Element script = new Element.tag("script");
-script.innerHTML="var map = new google.maps.Map(document.getElementById(\"$div\"),{zoom: 12,center: new google.maps.LatLng($x, $y),mapTypeId: google.maps.MapTypeId.ROADMAP});google.maps.event.addListener(map, 'bounds_changed', function() {});var marker = new google.maps.Marker({position: new google.maps.LatLng($x, $y),map: map,title:\"$title\"});";
- document.body.query("#target").elements.add(script);
-}
-
 
 
 void main() {
