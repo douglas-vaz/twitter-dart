@@ -3064,11 +3064,11 @@ Tools.linkHandle = function(handle) {
 function Tweet(_tweet) {
   this._tweet = _tweet;
 }
-Tweet.prototype.createTweetElem = function() {
+Tweet.prototype.createTweetElem = function(wrapDivId) {
   var id = this.getTweetId();
   var user = this.getUser();
   var tweetText = this.getTweetText();
-  var outerDiv = get$$document().body.querySelector("#tweets");
+  var outerDiv = get$$document().body.querySelector(("#" + wrapDivId));
   var foo = "";
   var div = _ElementFactoryProvider.Element$tag$factory("div");
   outerDiv.get$elements().add(div);
@@ -3148,7 +3148,7 @@ function dataReceived(e) {
   get$$document().body.get$elements().add(outerDiv);
   outerDiv.set$attributes(_map(["id", "tweets"]));
   for (var i = (0);
-   i < len; ++i) new Tweet(data.$index("results").$index(i)).createTweetElem();
+   i < len; ++i) new Tweet(data.$index("results").$index(i)).createTweetElem("tweets");
 }
 function getResponse(query) {
   var script = _ElementFactoryProvider.Element$tag$factory("script");

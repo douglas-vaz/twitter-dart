@@ -8,14 +8,14 @@ class Tweet
   
   Tweet(this._tweet);
 
-createTweetElem()
+createTweetElem(String wrapDivId)
 {
   var id = getTweetId();
   var user = getUser();  //User name
   String tweetText = getTweetText();
   
   //Look for wrapper div
-  Element outerDiv = document.body.query('#tweets');
+  Element outerDiv = document.body.query('#${wrapDivId}');
   
   String foo = '';
   

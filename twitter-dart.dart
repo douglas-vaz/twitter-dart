@@ -36,7 +36,7 @@ dataReceived(e) {
   
   //Add all tweets from response to the DOM
   for (int i = 0; i < len; ++i)
-    new Tweet(data['results'][i]).createTweetElem(); 
+    new Tweet(data['results'][i]).createTweetElem('tweets'); 
   
 }
 
