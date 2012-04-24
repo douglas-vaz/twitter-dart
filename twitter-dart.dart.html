@@ -16,7 +16,7 @@
     </style>
   </head>
   <body>
-    	<h1 style="position:relative;left:45%">Rest In Peace</h1>
+    	<h1 style="position:relative;left:45%">REST In Peace - Dart Twitter client</h1>
     	<h2 id="dump"></h2>
 	<div id="foo" style="position:relative;left:80%">
 	<input type="text" id="search" onClick="this.value='';">
@@ -27,10 +27,12 @@
 	
 	<div id="tweets"><div>
 	
-	<div id="lala">KJkjksdnksndkn</div>
+	<div id="foo"></div>
 	
     <script type="text/javascript" src="twitter-dart.dart.js"></script>
     <script src="http://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
+    
+    <!-- Javascript callback for JSON response to call Dart-->
         <script type="text/javascript">
   function callbackForJsonpApi(s) {
 	dataReceived(JSON.stringify(s));

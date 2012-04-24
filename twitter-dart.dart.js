@@ -3022,7 +3022,7 @@ function _jsKeys(obj) {
   }
   return null;
 }
-//  ********** Library IP **************
+//  ********** Library twitter-dart **************
 // ********** Code for top level **************
 function createTweetElem(tweet) {
   var id = tweet.$index("id");
@@ -3055,9 +3055,9 @@ function dataReceived(e) {
      $lt$(i, data.$index("results").$index((0)).$index("entities").$index("urls").get$length()); i = $add$(i, (1))) {
       var exurl = data.$index("results").$index((0)).$index("entities").$index("urls").$index(i).$index("expanded_url");
     }
-  } catch (baka) {
-    baka = _toDartException(baka);
-    print$("Baka done");
+  } catch (z) {
+    z = _toDartException(z);
+    print$(z);
   }
   try {
     get$$document().body.querySelector("#tweets").remove();

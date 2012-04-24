@@ -3,9 +3,10 @@
 
 createTweetElem(tweet)
 {
-  var id = tweet['id'];  //User name
-  var user = tweet['from_user'];
+  var id = tweet['id'];
+  var user = tweet['from_user'];  //User name
   
+  //Look for wrapper div
   Element outerDiv = document.body.query('#tweets');
   
   
@@ -13,7 +14,7 @@ createTweetElem(tweet)
   String foo = '';
   //Parent div wrapper for a tweet
   Element div = new Element.tag('div');
-  //Add wrapper to body
+  //Add wrapper div to body
   
   outerDiv.elements.add(div);
   
@@ -37,6 +38,8 @@ createTweetElem(tweet)
 dataReceived(e) {
   var data = JSON.parse(e);
   int len = data['results'].length;
+  
+  //Experimental plot map
   try{
     plot(data['results'][4]['geo']['coordinates'][0],data['results'][4]['geo']['coordinates'][1],"hello world","map");
   }catch(var z){print(z);}
@@ -49,12 +52,12 @@ dataReceived(e) {
       //document.query("#dump").innerHTML += '<a href=\"${exurl}\">${exurl}</a><br>';//[0];
     }
   }
-  catch(var baka)
+  catch(var z)
   {
-    print("Baka done");
+    print(z);
   }
   
-  //Recreate tweets div
+  //DOM cleanup
   try{
   document.body.query('#tweets').remove();
   }
@@ -62,12 +65,15 @@ dataReceived(e) {
   {
     print(ex.toString());
   }
+  
+  //Create wrapper div
   Element outerDiv = new Element.tag('div');
   document.body.elements.add(outerDiv);
   outerDiv.attributes = {"id":"tweets"};
   
+  //Add all tweets from response to the DOM
   for (int i = 0; i < len; ++i)
-  createTweetElem(data['results'][i]);
+    createTweetElem(data['results'][i]);
   
   
 }
@@ -89,6 +95,7 @@ getResponse(String query)
 
 }
 
+//Experimental plot geo on map
 plot(x,y,title,div)
 {
 Element script = new Element.tag("script");
