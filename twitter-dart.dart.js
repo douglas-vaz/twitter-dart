@@ -1271,6 +1271,7 @@ $dynamic("get$$$dom_children").Element = function() {
 $dynamic("get$$$dom_firstElementChild").Element = function() {
   return this.firstElementChild;
 }
+$dynamic("get$innerHTML").Element = function() { return this.innerHTML; };
 $dynamic("set$innerHTML").Element = function(value) { return this.innerHTML = value; };
 $dynamic("get$$$dom_lastElementChild").Element = function() {
   return this.lastElementChild;
@@ -1542,6 +1543,11 @@ $dynamic("get$elements").DocumentFragment = function() {
     this._elements = new FilteredElementList(this);
   }
   return this._elements;
+}
+$dynamic("get$innerHTML").DocumentFragment = function() {
+  var e = _ElementFactoryProvider.Element$tag$factory("div");
+  e.get$nodes().add(this.cloneNode(true));
+  return e.get$innerHTML();
 }
 $dynamic("set$innerHTML").DocumentFragment = function(value) {
   this.get$nodes().clear$_();
@@ -2392,6 +2398,12 @@ $dynamic("set$elements").SVGElement = function(value) {
   elements.clear$0();
   elements.addAll(value);
 }
+$dynamic("get$innerHTML").SVGElement = function() {
+  var container = _ElementFactoryProvider.Element$tag$factory("div");
+  var cloned = this.cloneNode(true);
+  container.get$elements().addAll(cloned.get$elements());
+  return container.get$innerHTML();
+}
 $dynamic("set$innerHTML").SVGElement = function(svg) {
   var container = _ElementFactoryProvider.Element$tag$factory("div");
   container.set$innerHTML(("<svg version=\"1.1\">" + svg + "</svg>"));
@@ -2586,6 +2598,7 @@ $dynamic("set$value").HTMLSelectElement = function(value) { return this.value = 
 // ********** Code for _SessionDescriptionImpl **************
 // ********** Code for _ShadowElementImpl **************
 // ********** Code for _ShadowRootImpl **************
+$dynamic("get$innerHTML").ShadowRoot = function() { return this.innerHTML; };
 $dynamic("set$innerHTML").ShadowRoot = function(value) { return this.innerHTML = value; };
 // ********** Code for _SharedWorkerImpl **************
 // ********** Code for _SharedWorkerContextImpl **************
@@ -3060,10 +3073,9 @@ Tweet.prototype.createTweetElem = function() {
   var div = _ElementFactoryProvider.Element$tag$factory("div");
   outerDiv.get$elements().add(div);
   div.set$attributes(_map(["class", "tweet", "id", ("" + id), "style", "background-color:#BADA55;padding:10px;margin:5px"]));
-  var pro_pic = _ElementFactoryProvider.Element$tag$factory("img");
-  div.get$elements().add(pro_pic);
   var img_src = this.getProfilePic().$index((0));
-  pro_pic.set$attributes(_map(["src", img_src]));
+  var img = ("<img src=\"" + img_src + "\" />");
+  div.set$innerHTML($add$(div.get$innerHTML(), Tools.getLinkHtml(this.getProfilePic().$index((1)), img)));
   var text = _ElementFactoryProvider.Element$tag$factory("p");
   div.get$elements().add(text);
   var links = this.getTweetLinks();

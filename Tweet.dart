@@ -28,10 +28,13 @@ createTweetElem()
   div.attributes = {"class":"tweet","id":"${id}","style":"background-color:#BADA55;padding:10px;margin:5px"};
   
   //Profile pic
-  Element pro_pic =new Element.tag('img');
-  div.elements.add(pro_pic);
+  //Element pro_pic =new Element.tag('img');
+  //div.elements.add(pro_pic);
   var img_src = getProfilePic()[0];
-  pro_pic.attributes = {'src':img_src};
+  //pro_pic.attributes = {'src':img_src};
+  
+  var img = '<img src=\"${img_src}\" />';
+  div.innerHTML += Tools.getLinkHtml(getProfilePic()[1],img);
   
   //Tweet text
   Element text = new Element.tag('p');
