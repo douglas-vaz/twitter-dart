@@ -1,5 +1,6 @@
 #import('dart:html');
-#import('dart:json');
+#import('./Tools.dart');
+//#import('dart:json');
 
 class Tweet
 {
@@ -11,12 +12,11 @@ createTweetElem()
 {
   var id = getTweetId();
   var user = getUser();  //User name
+  String tweetText = getTweetText();
   
   //Look for wrapper div
   Element outerDiv = document.body.query('#tweets');
   
-  
-  String tweetText = getTweetText();
   String foo = '';
   
   //Parent div wrapper for a tweet
@@ -39,6 +39,36 @@ createTweetElem()
   
   
   //Add links to links
+    var links = getTweetLinks();
+    if(links != []) //&& links.length > 0)
+    {
+      var offset = 0;
+      
+      for(int i = 0; i < links.length; i++){
+        String linkTxt = Tools.getLinkHtml(links[i]['url'],links[i]['display_url']);
+        var offlen = linkTxt.length;
+        
+        tweetText = tweetText.substring(0,links[i]['indices'][0]+offset) + linkTxt + tweetText.substring(links[i]['indices'][1]+offset);
+        offset += offlen - (links[i]['indices'][1]-links[i]['indices'][0]);
+        
+      }
+    }
+    
+    //Add links to mentions
+    links = getTweetMentions();
+    if(links != [])
+    {
+      var offset = 0;
+      
+      for(int i = 0; i < links.length; i++){
+        String linkTxt = Tools.getLinkHtml(Tools.linkHandle(links[i]['screen_name']),'@${links[i]['screen_name']}');
+        var offlen = linkTxt.length;
+        
+        tweetText = tweetText.substring(0,links[i]['indices'][0]+offset) + linkTxt + tweetText.substring(links[i]['indices'][1]+offset);
+        offset += offlen - (links[i]['indices'][1]-links[i]['indices'][0]);
+        
+      }
+    }
   
   
   text.innerHTML = '<b><a href=${user[1]}>${user[0]}</a></b>: $tweetText';
@@ -66,7 +96,7 @@ getTweetGeo()
 
 getTweetLinks()
 {
-  
+  return _tweet['entities']['urls'];
 }
 
 getTweetText()
@@ -83,6 +113,11 @@ getProfilePic()
   var pic = [_tweet['profile_image_url'],'https://api.twitter.com/1/users/profile_image?screen_name=${user}&size=original'];
   
   return pic;
+}
+
+getTweetMentions()
+{
+  return _tweet['entities']['user_mentions'];
 }
 
 }

@@ -86,6 +86,19 @@ function $ne$(x, y) {
   if (x == null) return y != null;
   return (typeof(x) != 'object') ? x !== y : !x.$eq(y);
 }
+function $sub$complex$(x, y) {
+  if (typeof(x) == 'number') {
+    $throw(new IllegalArgumentException(y));
+  } else if (typeof(x) == 'object') {
+    return x.$sub(y);
+  } else {
+    $throw(new NoSuchMethodException(x, "operator -", [y]));
+  }
+}
+function $sub$(x, y) {
+  if (typeof(x) == 'number' && typeof(y) == 'number') return x - y;
+  return $sub$complex$(x, y);
+}
 function $truncdiv$(x, y) {
   if (typeof(x) == 'number') {
     if (typeof(y) == 'number') {
@@ -3022,6 +3035,17 @@ function _jsKeys(obj) {
   }
   return null;
 }
+//  ********** Library Tools **************
+// ********** Code for Tools **************
+function Tools() {}
+Tools.getLinkHtml = function(url, text) {
+  if (text != null) return ("<a href=\"" + url + "\">" + text + "</a>");
+  else return ("<a href=\"" + url + "\">" + url + "</a>");
+}
+Tools.linkHandle = function(handle) {
+  return ("https://twitter.com/#!/" + handle);
+}
+// ********** Code for top level **************
 //  ********** Library Tweet **************
 // ********** Code for Tweet **************
 function Tweet(_tweet) {
@@ -3030,18 +3054,40 @@ function Tweet(_tweet) {
 Tweet.prototype.createTweetElem = function() {
   var id = this.getTweetId();
   var user = this.getUser();
+  var tweetText = this.getTweetText();
   var outerDiv = get$$document().body.querySelector("#tweets");
-  var tweetText = this._tweet.$index("text");
   var foo = "";
   var div = _ElementFactoryProvider.Element$tag$factory("div");
   outerDiv.get$elements().add(div);
   div.set$attributes(_map(["class", "tweet", "id", ("" + id), "style", "background-color:#BADA55;padding:10px;margin:5px"]));
   var pro_pic = _ElementFactoryProvider.Element$tag$factory("img");
   div.get$elements().add(pro_pic);
-  var img_src = this.getProfilePic().$index((1));
+  var img_src = this.getProfilePic().$index((0));
   pro_pic.set$attributes(_map(["src", img_src]));
   var text = _ElementFactoryProvider.Element$tag$factory("p");
   div.get$elements().add(text);
+  var links = this.getTweetLinks();
+  if ($ne$(links, [])) {
+    var offset = (0);
+    for (var i = (0);
+     i < links.get$length(); i++) {
+      var linkTxt = Tools.getLinkHtml(links.$index(i).$index("url"), links.$index(i).$index("display_url"));
+      var offlen = linkTxt.length;
+      tweetText = $add$($add$(tweetText.substring((0), $add$(links.$index(i).$index("indices").$index((0)), offset)), linkTxt), tweetText.substring($add$(links.$index(i).$index("indices").$index((1)), offset)));
+      offset = $add$(offset, ($sub$(offlen, ($sub$(links.$index(i).$index("indices").$index((1)), links.$index(i).$index("indices").$index((0)))))));
+    }
+  }
+  links = this.getTweetMentions();
+  if ($ne$(links, [])) {
+    var offset = (0);
+    for (var i = (0);
+     i < links.get$length(); i++) {
+      var linkTxt = Tools.getLinkHtml(Tools.linkHandle(links.$index(i).$index("screen_name")), ("@" + links.$index(i).$index("screen_name")));
+      var offlen = linkTxt.length;
+      tweetText = $add$($add$(tweetText.substring((0), $add$(links.$index(i).$index("indices").$index((0)), offset)), linkTxt), tweetText.substring($add$(links.$index(i).$index("indices").$index((1)), offset)));
+      offset = $add$(offset, ($sub$(offlen, ($sub$(links.$index(i).$index("indices").$index((1)), links.$index(i).$index("indices").$index((0)))))));
+    }
+  }
   text.set$innerHTML(("<b><a href=" + user.$index((1)) + ">" + user.$index((0)) + "</a></b>: " + tweetText));
 }
 Tweet.prototype.getUser = function() {
@@ -3051,10 +3097,19 @@ Tweet.prototype.getUser = function() {
 Tweet.prototype.getTweetId = function() {
   return this._tweet.$index("id");
 }
-Tweet.prototype.getProfilePic = function(user) {
-  if ($eq$(user)) user = this._tweet.$index("from_user");
+Tweet.prototype.getTweetLinks = function() {
+  return this._tweet.$index("entities").$index("urls");
+}
+Tweet.prototype.getTweetText = function() {
+  return this._tweet.$index("text");
+}
+Tweet.prototype.getProfilePic = function() {
+  var user = this._tweet.$index("from_user");
   var pic = [this._tweet.$index("profile_image_url"), ("https://api.twitter.com/1/users/profile_image?screen_name=" + user + "&size=original")];
   return pic;
+}
+Tweet.prototype.getTweetMentions = function() {
+  return this._tweet.$index("entities").$index("user_mentions");
 }
 // ********** Code for top level **************
 //  ********** Library twitter-dart **************
