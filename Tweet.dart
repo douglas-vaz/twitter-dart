@@ -1,6 +1,6 @@
 #import('dart:html');
 #import('./Tools.dart');
-//#import('dart:json');
+#import('./maps-plug/GoogleMaps.dart');
 
 class Tweet
 {
@@ -13,6 +13,13 @@ createTweetElem(String wrapDivId)
   var id = getTweetId();
   var user = getUser();  //User name
   String tweetText = getTweetText();
+  var geo = getTweetGeo();
+  
+  Element map = null;
+  if(geo != null)
+  {
+    map = new GoogleMaps(geo,[150,150],'blue').getimg();
+  }
   
   //Look for wrapper div
   Element outerDiv = document.body.query('#${wrapDivId}');
@@ -40,6 +47,10 @@ createTweetElem(String wrapDivId)
   Element text = new Element.tag('p');
   div.elements.add(text);
   
+  
+  //Add map
+  if(map != null)
+    div.elements.add(map);
   
   //Add links to links
     var links = getTweetLinks();
@@ -94,7 +105,13 @@ getTweetId()
 
 getTweetGeo()
 {
-  
+  try{
+    return _tweet['geo']['coordinates'];
+  }
+  catch(var e)
+  {
+    return null;
+  }
 }
 
 getTweetLinks()

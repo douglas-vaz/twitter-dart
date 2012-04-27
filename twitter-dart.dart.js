@@ -3059,6 +3059,23 @@ Tools.linkHandle = function(handle) {
   return ("https://twitter.com/#!/" + handle);
 }
 // ********** Code for top level **************
+//  ********** Library GoogleMaps **************
+// ********** Code for GoogleMaps **************
+function GoogleMaps(coordinates, dimensions, marker_color) {
+  this.coordinates = coordinates;
+  this.dimensions = dimensions;
+  this.marker_color = marker_color;
+}
+GoogleMaps.prototype.reqUrl = function() {
+  var url = ("http://maps.googleapis.com/maps/api/staticmap?center=" + this.coordinates.$index((0)) + "," + this.coordinates.$index((1)) + "&zoom=12&size=" + this.dimensions.$index((0)) + "x" + this.dimensions.$index((1)) + "&markers=color:" + this.marker_color + "%7C" + this.coordinates.$index((0)) + "," + this.coordinates.$index((1)) + "&sensor=false");
+  return url;
+}
+GoogleMaps.prototype.getimg = function() {
+  var img = _ElementFactoryProvider.Element$tag$factory("img");
+  img.set$attributes(_map(["src", ("" + this.reqUrl())]));
+  return img;
+}
+// ********** Code for top level **************
 //  ********** Library Tweet **************
 // ********** Code for Tweet **************
 function Tweet(_tweet) {
@@ -3068,6 +3085,11 @@ Tweet.prototype.createTweetElem = function(wrapDivId) {
   var id = this.getTweetId();
   var user = this.getUser();
   var tweetText = this.getTweetText();
+  var geo = this.getTweetGeo();
+  var map = null;
+  if ($ne$(geo)) {
+    map = new GoogleMaps(geo, [(150), (150)], "blue").getimg();
+  }
   var outerDiv = get$$document().body.querySelector(("#" + wrapDivId));
   var foo = "";
   var div = _ElementFactoryProvider.Element$tag$factory("div");
@@ -3078,6 +3100,7 @@ Tweet.prototype.createTweetElem = function(wrapDivId) {
   div.set$innerHTML($add$(div.get$innerHTML(), Tools.getLinkHtml(this.getProfilePic().$index((1)), img)));
   var text = _ElementFactoryProvider.Element$tag$factory("p");
   div.get$elements().add(text);
+  if (map != null) div.get$elements().add(map);
   var links = this.getTweetLinks();
   if ($ne$(links, [])) {
     var offset = (0);
@@ -3108,6 +3131,14 @@ Tweet.prototype.getUser = function() {
 }
 Tweet.prototype.getTweetId = function() {
   return this._tweet.$index("id");
+}
+Tweet.prototype.getTweetGeo = function() {
+  try {
+    return this._tweet.$index("geo").$index("coordinates");
+  } catch (e) {
+    e = _toDartException(e);
+    return null;
+  }
 }
 Tweet.prototype.getTweetLinks = function() {
   return this._tweet.$index("entities").$index("urls");
