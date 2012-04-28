@@ -51,12 +51,11 @@ createTweetElem(String wrapDivId)
   //Add map
   if(map != null)
     div.elements.add(map);
-  
+  var offset = 0;
   //Add links to links
     var links = getTweetLinks();
     if(links != []) //&& links.length > 0)
     {
-      var offset = 0;
       
       for(int i = 0; i < links.length; i++){
         String linkTxt = Tools.getLinkHtml(links[i]['url'],links[i]['display_url']);
@@ -72,7 +71,7 @@ createTweetElem(String wrapDivId)
     links = getTweetMentions();
     if(links != [])
     {
-      var offset = 0;
+      //var offset = 0;
       
       for(int i = 0; i < links.length; i++){
         String linkTxt = Tools.getLinkHtml(Tools.linkHandle(links[i]['screen_name']),'@${links[i]['screen_name']}');
@@ -83,8 +82,21 @@ createTweetElem(String wrapDivId)
         
       }
     }
-  
-  
+//Add links to hashtags
+  var hash=getTweetHashtag();
+  if(hash != [])
+    {
+      //var offset = 0;
+      
+      for(int i = 0; i < hash.length; i++){
+        String linkTxt = Tools.getClickHtml("getResponse('${hash[i]['text']}');document.getElementById('search').value='#${hash[i]['text']}';",'#${hash[i]['text']}');
+        var offlen = linkTxt.length;
+        
+        tweetText = tweetText.substring(0,hash[i]['indices'][0]+offset) + linkTxt + tweetText.substring(hash[i]['indices'][1]+offset);
+        offset += offlen - (hash[i]['indices'][1]-hash[i]['indices'][0]);
+        
+      }
+    }
   text.innerHTML = '<b><a href=${user[1]}>${user[0]}</a></b>: $tweetText';
 }
 
@@ -138,6 +150,10 @@ getProfilePic()
 getTweetMentions()
 {
   return _tweet['entities']['user_mentions'];
+}
+getTweetHashtag()
+{
+  return _tweet['entities']['hashtags'];
 }
 
 }
