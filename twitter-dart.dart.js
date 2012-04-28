@@ -1319,7 +1319,6 @@ $dynamic("set$value").AudioParam = function(value) { return this.value = value; 
 // ********** Code for _BarInfoImpl **************
 // ********** Code for _BaseElementImpl **************
 // ********** Code for _BaseFontElementImpl **************
-// ********** Code for _BatteryManagerImpl **************
 // ********** Code for _BeforeLoadEventImpl **************
 // ********** Code for _BiquadFilterNodeImpl **************
 // ********** Code for _BlobImpl **************
@@ -2128,8 +2127,6 @@ $dynamic("get$name").HTMLMapElement = function() { return this.name; };
 // ********** Code for _MediaControllerImpl **************
 // ********** Code for _MediaElementAudioSourceNodeImpl **************
 // ********** Code for _MediaErrorImpl **************
-// ********** Code for _MediaKeyErrorImpl **************
-// ********** Code for _MediaKeyEventImpl **************
 // ********** Code for _MediaListImpl **************
 $dynamic("is$List").MediaList = function(){return true};
 $dynamic("is$Collection").MediaList = function(){return true};
@@ -2370,7 +2367,6 @@ $dynamic("set$value").HTMLParamElement = function(value) { return this.value = v
 // ********** Code for _PerformanceNavigationImpl **************
 // ********** Code for _PerformanceTimingImpl **************
 // ********** Code for _PointImpl **************
-// ********** Code for _PointerLockImpl **************
 // ********** Code for _PopStateEventImpl **************
 // ********** Code for _PositionErrorImpl **************
 // ********** Code for _PreElementImpl **************
@@ -2889,7 +2885,6 @@ $dynamic("get$name").WebGLActiveInfo = function() { return this.name; };
 // ********** Code for _WebGLTextureImpl **************
 // ********** Code for _WebGLUniformLocationImpl **************
 // ********** Code for _WebGLVertexArrayObjectOESImpl **************
-// ********** Code for _WebKitCSSFilterValueImpl **************
 // ********** Code for _WebKitCSSRegionRuleImpl **************
 // ********** Code for _WebKitMutationObserverImpl **************
 // ********** Code for _WebKitNamedFlowImpl **************
@@ -3061,8 +3056,8 @@ Tools.getLinkHtml = function(url, text) {
   else return ("<a href=\"" + url + "\">" + url + "</a>");
 }
 Tools.getClickHtml = function(url, text) {
-  if (text != null) return ("<a style=\"color:blue;\" onClick=\"" + url + "\">" + text + "</a>");
-  else return ("<a style=\"color:blue;\" onClick=\"" + url + "\">" + url + "</a>");
+  if (text != null) return ("<a href=\"javascript:void(0)\" style=\"color:blue;\" onClick=\"" + url + "\">" + text + "</a>");
+  else return ("<a href=\"javascript:void(0)\" style=\"color:blue;\" onClick=\"" + url + "\">" + url + "</a>");
 }
 Tools.linkHandle = function(handle) {
   return ("https://twitter.com/#!/" + handle);
@@ -3213,7 +3208,7 @@ function main() {
   var y = dataReceived;
 }
 // 111 dynamic types.
-// 259 types
+// 258 types
 // 20 !leaf
 (function(){
   var v0/*SVGElement*/ = 'SVGElement|SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimationElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGSetElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGLinearGradientElement|SVGRadialGradientElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTextContentElement|SVGTextPathElement|SVGTextPositioningElement|SVGAltGlyphElement|SVGTRefElement|SVGTSpanElement|SVGTextElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement';
@@ -3224,7 +3219,7 @@ function main() {
   var table = [
     // [dynamic-dispatch-tag, tags of classes implementing dynamic-dispatch-tag]
     ['AudioParam', 'AudioParam|AudioGain']
-    , ['CSSValueList', 'CSSValueList|WebKitCSSTransformValue|WebKitCSSFilterValue']
+    , ['CSSValueList', 'CSSValueList|WebKitCSSTransformValue']
     , ['CharacterData', v1/*CharacterData*/]
     , ['DOMTokenList', 'DOMTokenList|DOMSettableTokenList']
     , ['HTMLDocument', v2/*HTMLDocument*/]

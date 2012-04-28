@@ -10,9 +10,9 @@ class Tools {
 static getClickHtml(String url,[String text])
   {
     if(text != null)
-      return '<a style="color:blue;" onClick=\"${url}\">$text</a>';
+      return '<a href=\"javascript:void(0)\" style="color:blue;" onClick=\"${url}\">$text</a>';
       else
-        return  '<a style="color:blue;" onClick=\"$url\">$url</a>';
+        return  '<a href=\"javascript:void(0)\" style=\"color:blue;\" onClick=\"$url\">$url</a>';
   }
   
   static linkHandle(String handle)
